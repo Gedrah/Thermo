@@ -4,10 +4,18 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import retrofit2.Call;
+import thermo.aziaka.donavan.com.thermo.CallBacks.WeatherCallBack;
+import thermo.aziaka.donavan.com.thermo.POJO.Weather;
+
+import static thermo.aziaka.donavan.com.thermo.Constants.APP_ID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,9 +23,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+        callWeatherAPI("Strasbourg");
+        manageEvents();
+    }
+
+    private void manageEvents() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,25 +39,31 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void callWeatherAPI(String city) {
+        OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
+        Call<Weather> call = api.getWeather(city, APP_ID);
+        call.enqueue(new WeatherCallBack(this));
+    }
+
+    public void updateCardInfo(Weather obj) {
+        Log.e("Success", "it works");
+        CardView cardview = findViewById(R.id.card);
+        ((TextView)cardview.getChildAt(0)).setText(obj.getName());
+        ((TextView)cardview.getChildAt(1)).setText(String.valueOf(obj.getMain().getTemp()));
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
