@@ -1,5 +1,6 @@
 package thermo.aziaka.donavan.com.thermo;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import retrofit2.Call;
@@ -62,10 +62,22 @@ public class MainActivity extends AppCompatActivity {
         Log.e("Success", "it works");
         CardView cardview = findViewById(R.id.card);
         LinearLayout layout = (LinearLayout) cardview.getChildAt(0);
+        layout.setBackground(chooseBackgroundColor(obj.getMain().getTemp()));
         ((TextView)layout.getChildAt(0)).setText(obj.getName() + ", " + obj.getSys().getCountry());
         ((TextView)layout.getChildAt(1)).setText(String.valueOf((long)obj.getMain().getTemp()) + "°C");
         ((TextView)layout.getChildAt(2)).setText(String.valueOf((long)obj.getMain().getTemp() * 9/5 + 32) + "°F");
         layout.getChildAt(3).setVisibility(View.INVISIBLE);
+    }
+
+    private Drawable chooseBackgroundColor(float temp) {
+        if (temp >= 5 && temp < 15)
+            return getResources().getDrawable(R.drawable.background_gradient_green);
+        else if (temp >= 15 && temp < 25)
+            return getResources().getDrawable(R.drawable.background_gradient_yellow);
+        else if (temp >= 25)
+            return getResources().getDrawable(R.drawable.background_gradient_red);
+        else
+            return getResources().getDrawable(R.drawable.background_gradient_blue);
     }
 
     @Override
