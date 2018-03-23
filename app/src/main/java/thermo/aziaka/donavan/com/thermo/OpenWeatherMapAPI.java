@@ -21,6 +21,14 @@ public interface OpenWeatherMapAPI {
     @GET("weather")
     Call<Weather> getWeather(
             @Query("q") String name,
+            @Query("units") String unit,
+            @Query("appid") String id
+    );
+
+    Call<Weather> getWeatherLocation(
+            @Query("lat") String lat,
+            @Query("lon") String lon,
+            @Query("units") String unit,
             @Query("appid") String id
     );
 

@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import retrofit2.Call;
@@ -41,15 +43,29 @@ public class MainActivity extends AppCompatActivity {
 
     public void callWeatherAPI(String city) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
-        Call<Weather> call = api.getWeather(city, APP_ID);
+        Call<Weather> call = api.getWeather(city,"metric", APP_ID);
+        CardView cardview = findViewById(R.id.card);
+        LinearLayout layout = (LinearLayout) cardview.getChildAt(0);
+        layout.getChildAt(3).setVisibility(View.VISIBLE);
+        call.enqueue(new WeatherCallBack(this));
+    }
+
+    public void callWeatherAPI(int lat, int lon) {
+        OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
+        Call<Weather> call = api.getWeatherLocation(Integer.toString(lon), Integer.toString(lat),"metric", APP_ID);
+        CardView cardview = findViewById(R.id.card);
+        cardview.getChildAt(3).setVisibility(View.VISIBLE);
         call.enqueue(new WeatherCallBack(this));
     }
 
     public void updateCardInfo(Weather obj) {
         Log.e("Success", "it works");
         CardView cardview = findViewById(R.id.card);
-        ((TextView)cardview.getChildAt(0)).setText(obj.getName());
-        ((TextView)cardview.getChildAt(1)).setText(String.valueOf(obj.getMain().getTemp()));
+        LinearLayout layout = (LinearLayout) cardview.getChildAt(0);
+        ((TextView)layout.getChildAt(0)).setText(obj.getName() + ", " + obj.getSys().getCountry());
+        ((TextView)layout.getChildAt(1)).setText(String.valueOf((long)obj.getMain().getTemp()) + "°C");
+        ((TextView)layout.getChildAt(2)).setText(String.valueOf((long)obj.getMain().getTemp() * 9/5 + 32) + "°F");
+        layout.getChildAt(3).setVisibility(View.INVISIBLE);
     }
 
     @Override
