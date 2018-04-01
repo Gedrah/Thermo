@@ -30,6 +30,7 @@ public class WeatherCallBack implements Callback<Weather> {
             context.updateCardInfo(response.body());
         } else {
             Log.e("ResponseValid", response.message());
+            context.manageApiError(response.message());
         }
     }
 
@@ -37,5 +38,6 @@ public class WeatherCallBack implements Callback<Weather> {
     public void onFailure(retrofit2.Call<Weather> call, Throwable t) {
         Log.e("ResponseFail", t.getMessage());
         Log.e("URL", Arrays.toString(t.getStackTrace()));
+        context.manageApiError(t.getMessage());
     }
 }
