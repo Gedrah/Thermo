@@ -25,6 +25,7 @@ public interface OpenWeatherMapAPI {
             @Query("appid") String id
     );
 
+    @GET("weather")
     Call<Weather> getWeatherLocation(
             @Query("lat") String lat,
             @Query("lon") String lon,

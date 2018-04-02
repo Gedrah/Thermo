@@ -2,11 +2,14 @@ package thermo.aziaka.donavan.com.thermo;
 
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -23,13 +26,16 @@ import static thermo.aziaka.donavan.com.thermo.Constants.APP_ID;
 
 public class MainActivity extends AppCompatActivity {
 
+    Geolocal position;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        position = new Geolocal(this);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getSupportActionBar().hide();
-        callWeatherAPI("Strasbourg");
+        Location local = position.getLastBestLocation();
     }
 
     public void manageApiError(String error) {
@@ -45,17 +51,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectCity(View view) {
         final EditText input = new EditText(this);
+        input.setInputType(1);
         AlertDialog.Builder dialog = new AlertDialog.Builder(this).setTitle("Selectionner votre ville")
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        callWeatherAPI(input.getText().toString());
+                        if (!TextUtils.isEmpty(input.getText().toString()))
+                            callWeatherAPI(input.getText().toString());
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        Location local = position.getLastBestLocation();
+                        callWeatherAPI(local.getLatitude(), local.getLongitude());
                     }
                 });
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -75,11 +84,13 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new WeatherCallBack(this));
     }
 
-    public void callWeatherAPI(int lat, int lon) {
+    public void callWeatherAPI(double lat, double lon) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
-        Call<Weather> call = api.getWeatherLocation(Integer.toString(lon), Integer.toString(lat),"metric", APP_ID);
+        Log.e("Datas", Double.toString(lat) + " : " + Double.toString(lon));
+        Call<Weather> call = api.getWeatherLocation(Double.toString(lat), Double.toString(lon),"metric", APP_ID);
         CardView cardview = findViewById(R.id.card);
-        cardview.getChildAt(3).setVisibility(View.VISIBLE);
+        LinearLayout layout = (LinearLayout) cardview.getChildAt(0);
+        layout.getChildAt(3).setVisibility(View.VISIBLE);
         call.enqueue(new WeatherCallBack(this));
     }
 
@@ -119,4 +130,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
