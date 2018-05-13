@@ -1,16 +1,13 @@
-package thermo.aziaka.donavan.com.thermo;
+package thermo.aziaka.donavan.com.thermo.API;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Multipart;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
-import thermo.aziaka.donavan.com.thermo.POJO.Weather;
+import thermo.aziaka.donavan.com.thermo.Models.Weather;
 
-import static thermo.aziaka.donavan.com.thermo.Constants.API_URL;
-import static thermo.aziaka.donavan.com.thermo.Constants.APP_ID;
+import static thermo.aziaka.donavan.com.thermo.Constant.API_URL;
 
 /**
  * Created by donavan on 3/19/18.
@@ -31,6 +28,12 @@ public interface OpenWeatherMapAPI {
             @Query("lon") String lon,
             @Query("units") String unit,
             @Query("appid") String id
+    );
+
+    @GET("weather")
+    Call<Weather> getWeatherList(
+            @Query("id") String list,
+            @Query("units") String unit
     );
 
     Retrofit retrofit = new Retrofit.Builder()

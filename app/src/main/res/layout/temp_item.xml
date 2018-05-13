@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <android.support.v7.widget.CardView
+        app:cardCornerRadius="20dp"
+        android:background="@drawable/background_gradient_blue"
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="150dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/background_gradient_blue"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/city"
+                android:layout_width="wrap_content"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text="city"
+                android:textSize="30dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:textColor="@color/white"
+                android:text="38°C"
+                android:textSize="60dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/country"
+                android:layout_width="match_parent"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:layout_gravity="bottom"
+                android:text="country"
+                android:textStyle="bold"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

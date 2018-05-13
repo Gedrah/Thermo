@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Thermo</string>
     <string name="action_settings">Settings</string>
+    <string name="ville">Ville</string>
+    <string name="pays">Pays</string>
+    <string name="voir_la_ville_sur_google_maps">Voir la ville sur Google Maps</string>
 </resources>

@@ -1,4 +1,4 @@
-package thermo.aziaka.donavan.com.thermo.POJO;
+package thermo.aziaka.donavan.com.thermo.Models;
 
 /**
  * Created by donavan on 3/20/18.

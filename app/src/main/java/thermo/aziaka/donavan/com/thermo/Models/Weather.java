@@ -1,4 +1,4 @@
-package thermo.aziaka.donavan.com.thermo.POJO;
+package thermo.aziaka.donavan.com.thermo.Models;
 
 import java.util.List;
 
