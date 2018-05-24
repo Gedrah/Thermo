@@ -13,6 +13,7 @@ import thermo.aziaka.donavan.com.thermo.Geolocal;
 import thermo.aziaka.donavan.com.thermo.Models.City;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.RecyclerView.TemperatureAdapter;
+import thermo.aziaka.donavan.com.thermo.Utils;
 
 import static thermo.aziaka.donavan.com.thermo.Constant.APP_ID;
 
@@ -34,7 +35,7 @@ public class MainPresenter implements MainContract.Presenter {
     public void callWeatherAPI(String city) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
         Call<Weather> call = api.getWeather(city,"metric", APP_ID);
-        call.enqueue(new WeatherCallBack(this));
+        call.enqueue(new WeatherCallBack(this, mView));
         mView.showProgressDialog("Chargement de la ville...");
     }
 
@@ -42,7 +43,15 @@ public class MainPresenter implements MainContract.Presenter {
     public void callWeatherAPI(double lat, double lon) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
         Call<Weather> call = api.getWeatherLocation(Double.toString(lat), Double.toString(lon),"metric", APP_ID);
-        call.enqueue(new WeatherCallBack(this));
+        call.enqueue(new WeatherCallBack(this, mView));
+        mView.showProgressDialog("Chargement de la ville...");
+    }
+
+    @Override
+    public void callWeatherAPI(List<String> cities) {
+        OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
+        Call<Weather> call = api.getWeatherList(Utils.createCityString(cities),"metric", APP_ID);
+        call.enqueue(new WeatherCallBack(this, mView));
         mView.showProgressDialog("Chargement de la ville...");
     }
 
@@ -65,7 +74,8 @@ public class MainPresenter implements MainContract.Presenter {
         return mView.sendCityFromEdit();
     }
 
-    public MainContract.View getCurrentView() {
-        return mView;
+    @Override
+    public void addTemperature() {
+        mView.addTemperatureItem();
     }
 }

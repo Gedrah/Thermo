@@ -2,13 +2,13 @@ package thermo.aziaka.donavan.com.thermo.RecyclerView;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import thermo.aziaka.donavan.com.thermo.CallBacks.ItemListClickEventsCallBack;
 import thermo.aziaka.donavan.com.thermo.Main.MainContract;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.R;
@@ -33,6 +33,7 @@ public class TemperatureAdapter extends RecyclerView.Adapter<TemperatureViewHold
     @Override
     public void onBindViewHolder(TemperatureViewHolder holder, int position) {
         holder.bind(currentList.get(position));
+        holder.itemView.setOnClickListener(new ItemListClickEventsCallBack(currentView));
     }
 
     @Override

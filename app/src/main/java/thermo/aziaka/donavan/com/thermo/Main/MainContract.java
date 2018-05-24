@@ -27,9 +27,10 @@ public interface MainContract {
     interface Presenter {
         void callWeatherAPI(String city);
         void callWeatherAPI(double lat, double lon);
+        void callWeatherAPI(List<String> cities);
         void callGeolocalisation();
         void addItemToList(Weather item);
         City getUserCity();
-        MainContract.View getCurrentView();
+        void addTemperature();
     }
 }

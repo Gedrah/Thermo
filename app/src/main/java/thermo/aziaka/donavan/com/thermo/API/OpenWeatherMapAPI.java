@@ -33,7 +33,8 @@ public interface OpenWeatherMapAPI {
     @GET("weather")
     Call<Weather> getWeatherList(
             @Query("id") String list,
-            @Query("units") String unit
+            @Query("units") String unit,
+            @Query("appid") String id
     );
 
     Retrofit retrofit = new Retrofit.Builder()

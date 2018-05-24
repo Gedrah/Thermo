@@ -17,9 +17,11 @@ import thermo.aziaka.donavan.com.thermo.Models.Weather;
 public class WeatherCallBack implements Callback<Weather> {
 
     private MainContract.Presenter context;
+    private MainContract.View mView;
 
-    public WeatherCallBack(MainContract.Presenter _context) {
+    public WeatherCallBack(MainContract.Presenter _context, MainContract.View view) {
         context = _context;
+        mView = view;
     }
 
     @Override
@@ -30,16 +32,16 @@ public class WeatherCallBack implements Callback<Weather> {
             context.addItemToList(response.body());
         } else {
             Log.e("ResponseValid", response.message());
-            context.getCurrentView().showMessage("Erreur", "Votre ville n'existe pas.");
+            mView.showMessage("Erreur", "Votre ville n'existe pas.");
         }
-        context.getCurrentView().hideProgressDialog();
+        mView.hideProgressDialog();
     }
 
     @Override
     public void onFailure(retrofit2.Call<Weather> call, Throwable t) {
         Log.e("ResponseFail", t.getMessage());
         Log.e("URL", Arrays.toString(t.getStackTrace()));
-        context.getCurrentView().showMessage("Erreur", "Un problème de connexion est survenu");
-        context.getCurrentView().hideProgressDialog();
+        mView.showMessage("Erreur", "Un problème de connexion est survenu");
+        mView.hideProgressDialog();
     }
 }
