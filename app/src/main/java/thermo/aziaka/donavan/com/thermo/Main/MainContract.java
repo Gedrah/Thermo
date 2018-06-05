@@ -30,6 +30,7 @@ public interface MainContract {
         void callWeatherAPI(List<String> cities);
         void callGeolocalisation();
         void addItemToList(Weather item);
+        void addItemToList(List<Weather> items);
         City getUserCity();
         void addTemperature();
     }

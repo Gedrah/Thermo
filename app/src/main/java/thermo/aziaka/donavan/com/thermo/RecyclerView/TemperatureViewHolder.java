@@ -1,6 +1,7 @@
 package thermo.aziaka.donavan.com.thermo.RecyclerView;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 

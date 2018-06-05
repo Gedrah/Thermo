@@ -1,11 +1,14 @@
 package thermo.aziaka.donavan.com.thermo.API;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Query;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
+import thermo.aziaka.donavan.com.thermo.Models.WeatherList;
 
 import static thermo.aziaka.donavan.com.thermo.Constant.API_URL;
 
@@ -30,8 +33,8 @@ public interface OpenWeatherMapAPI {
             @Query("appid") String id
     );
 
-    @GET("weather")
-    Call<Weather> getWeatherList(
+    @GET("group")
+    Call<WeatherList> getWeatherList(
             @Query("id") String list,
             @Query("units") String unit,
             @Query("appid") String id

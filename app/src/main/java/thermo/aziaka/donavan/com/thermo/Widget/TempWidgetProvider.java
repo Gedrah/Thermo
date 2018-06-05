@@ -13,10 +13,7 @@ import thermo.aziaka.donavan.com.thermo.R;
 public class TempWidgetProvider extends AppWidgetProvider {
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        final int N = appWidgetIds.length;
-
-        for (int i = 0; i < N; i++) {
-            int appWidgetId = appWidgetIds[i];
+        for (int appWidgetId : appWidgetIds) {
             // Create an Intent to launch ExampleActivity
             Intent intent = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);

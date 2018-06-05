@@ -46,11 +46,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mPresenter = new MainPresenter(this);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
     private void initViews() {
         FloatingActionButton mFab = findViewById(R.id.fab);
         Button mGeoButton = findViewById(R.id.geo_button);

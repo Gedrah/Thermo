@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/title_temp"
         android:textColor="@color/blackColor"
-        android:text="Température courante : "
+        android:text="Température  : "
         android:textSize="24dp"
         android:layout_gravity="center"
         android:layout_marginStart="16dp"
