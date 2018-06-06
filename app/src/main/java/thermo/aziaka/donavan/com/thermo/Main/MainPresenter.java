@@ -3,6 +3,7 @@ package thermo.aziaka.donavan.com.thermo.Main;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -36,6 +37,7 @@ public class MainPresenter implements MainContract.Presenter {
         adapter = new TemperatureAdapter(mView, list);
         mView.setRecyclerView(adapter);
         List <String> newList = getWeatherListFromDatabase();
+        position = new Geolocal((Context)mView);
         if (newList != null)
             callWeatherAPI(newList);
     }
@@ -59,7 +61,6 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void callWeatherAPI(List<String> cities) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
-        Log.e("DatasWTF", Utils.createCityString(cities));
         Call<WeatherList> call = api.getWeatherList(Utils.createCityString(cities),"metric", APP_ID);
         call.enqueue(new ListWeatherCallBack(this, mView));
         mView.showProgressDialog("Chargement de la ville...");
@@ -67,10 +68,16 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void callGeolocalisation() {
-
+        mView.getTemperatureLocalisation(position.getLastBestLocation());
     }
 
-    public void initAdapter(List<Weather> list) {
+    @Override
+    public void getGeolocalisation(Location pos) {
+        if (pos != null) {
+            callWeatherAPI(pos.getLatitude(), pos.getLongitude());
+        } else {
+            mView.showMessage("Localisation", "Veuillez activer la géolocalisation pour continuer.");
+        }
     }
 
     @Override

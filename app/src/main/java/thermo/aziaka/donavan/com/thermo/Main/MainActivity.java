@@ -1,7 +1,9 @@
 package thermo.aziaka.donavan.com.thermo.Main;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -102,8 +104,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void getTemperatureLocalisation() {
-        // get localisation rights
+    public void getTemperatureLocalisation(final Location pos) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                .setTitle("Activer la Geolocalisation")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.getGeolocalisation(pos);
+                    }
+                })
+                .setNegativeButton("Annuler", new DismissClickEventsCallBack());
+        dialog.show();
     }
 
     @Override

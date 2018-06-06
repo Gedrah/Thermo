@@ -1,5 +1,7 @@
 package thermo.aziaka.donavan.com.thermo.Main;
 
+import android.location.Location;
+
 import java.util.List;
 
 import thermo.aziaka.donavan.com.thermo.Models.City;
@@ -14,7 +16,7 @@ public interface MainContract {
     interface View {
         void showMessage(String title, String message);
         void addTemperatureItem();
-        void getTemperatureLocalisation();
+        void getTemperatureLocalisation(Location pos);
         void setRecyclerView(TemperatureAdapter adapter);
         City sendCityFromEdit();
         void showProgressDialog(String message);
@@ -31,6 +33,7 @@ public interface MainContract {
         void callGeolocalisation();
         void addItemToList(Weather item);
         void addItemToList(List<Weather> items);
+        void getGeolocalisation(Location pos);
         City getUserCity();
         void addTemperature();
     }

@@ -16,23 +16,25 @@ import thermo.aziaka.donavan.com.thermo.Main.MainActivity;
 public class Geolocal {
 
     private LocationManager mLocationManager;
-    private MainActivity currentContext;
+    private Context currentContext;
 
-    public Geolocal(MainActivity context) {
+    public Geolocal(Context context) {
         mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         currentContext = context;
     }
 
     public Location getLastBestLocation() {
         if (ActivityCompat.checkSelfPermission(currentContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(currentContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(currentContext, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                return null;
-            } else {
+            ActivityCompat.requestPermissions((MainActivity) currentContext, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return null;
+        } else {
             Location locationGPS = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             Location locationNet = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
             long GPSLocationTime = 0;
-            if (null != locationGPS) { GPSLocationTime = locationGPS.getTime(); }
+            if (null != locationGPS) {
+                GPSLocationTime = locationGPS.getTime();
+            }
 
             long NetLocationTime = 0;
 
@@ -40,10 +42,9 @@ public class Geolocal {
                 NetLocationTime = locationNet.getTime();
             }
 
-            if ( 0 < GPSLocationTime - NetLocationTime ) {
+            if (0 < GPSLocationTime - NetLocationTime) {
                 return locationGPS;
-            }
-            else {
+            } else {
                 return locationNet;
             }
         }
