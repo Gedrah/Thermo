@@ -18,6 +18,7 @@ public class Weather {
     private int id;
     private String name;
     private int cod;
+    private boolean favori;
 
     public List<WeatherObject> getWeather() {
         return weather;
@@ -106,5 +107,13 @@ public class Weather {
 
     public void setSys(Sys sys) {
         this.sys = sys;
+    }
+
+    public boolean isFavori() {
+        return favori;
+    }
+
+    public void setFavori(boolean favori) {
+        this.favori = favori;
     }
 }

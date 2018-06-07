@@ -88,6 +88,28 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
+    public void checkFavori(int position) {
+        for (int i = 0; i < list.size(); i++) {
+            if (position == i) {
+                list.get(i).setFavori(true);
+            } else {
+                list.get(i).setFavori(false);
+            }
+        }
+    }
+
+    public int getFavoriFromShared() {
+        return 0;
+    }
+
+    @Override
+    public void deleteItemToList(int position) {
+        list.remove(position);
+        adapter.updateTemperatureList(list);
+        saveWeatherList(list);
+    }
+
+    @Override
     public void addItemToList(List<Weather> items) {
         list = items;
         adapter.updateTemperatureList(list);

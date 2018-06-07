@@ -1,0 +1,22 @@
+package thermo.aziaka.donavan.com.thermo.CallBacks;
+
+import android.view.View;
+
+import thermo.aziaka.donavan.com.thermo.Main.MainContract;
+
+public class FavoriClickEventsCallBack implements View.OnClickListener {
+
+    private MainContract.View mView;
+    private int position;
+
+    public FavoriClickEventsCallBack(int pos, MainContract.View view) {
+        mView = view;
+        position = pos;
+    }
+
+    @Override
+    public void onClick(View v) {
+        mView.setFavoriItem(position);
+        mView.showMessage("Favoris", "L'objet a la position " + position + " a été mis en favoris.");
+    }
+}

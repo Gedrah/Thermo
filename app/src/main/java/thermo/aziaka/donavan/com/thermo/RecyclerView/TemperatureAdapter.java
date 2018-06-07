@@ -34,6 +34,7 @@ public class TemperatureAdapter extends RecyclerView.Adapter<TemperatureViewHold
     public void onBindViewHolder(TemperatureViewHolder holder, int position) {
         holder.bind(currentList.get(position));
         holder.itemView.setOnClickListener(new ItemListClickEventsCallBack(currentView));
+        holder.events(position, currentView);
     }
 
     @Override

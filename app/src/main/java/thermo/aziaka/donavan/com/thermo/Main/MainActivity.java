@@ -23,6 +23,7 @@ import java.util.Map;
 import thermo.aziaka.donavan.com.thermo.CallBacks.AddTemperatureClickEventsCallBack;
 import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEventsCallBack;
 import thermo.aziaka.donavan.com.thermo.CallBacks.DismissClickEventsCallBack;
+import thermo.aziaka.donavan.com.thermo.CallBacks.EditTemperatureClickEventsCallBack;
 import thermo.aziaka.donavan.com.thermo.CallBacks.FabClickEvents;
 import thermo.aziaka.donavan.com.thermo.CallBacks.GeoButtonClickEvents;
 import thermo.aziaka.donavan.com.thermo.Models.City;
@@ -104,6 +105,34 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
+    public void deleteTemperatureItem(final int position) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                .setTitle("Etes-vous sûr de vouloir supprimer cette ville ?")
+                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.deleteItemToList(position);
+                    }
+                })
+                .setNegativeButton("Non", new DismissClickEventsCallBack());
+        dialog.show();
+    }
+
+    @Override
+    public void editTemperatureItem(final int position) {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.select_city_item, null);
+        city = alertLayout.findViewById(R.id.city);
+        country = alertLayout.findViewById(R.id.country);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                .setTitle("Changer la ville")
+                .setPositiveButton("Ok", new EditTemperatureClickEventsCallBack(mPresenter, position))
+                .setNegativeButton("Annuler", new DismissClickEventsCallBack())
+                .setView(alertLayout);
+        dialog.show();
+    }
+
+    @Override
     public void getTemperatureLocalisation(final Location pos) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this)
                 .setTitle("Activer la Geolocalisation")
@@ -137,6 +166,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     public void hideProgressDialog() {
         progressDialog.hide();
         progressDialog.dismiss();
+    }
+
+    @Override
+    public void setFavoriItem(int position) {
+        mPresenter.checkFavori(position);
     }
 
 }

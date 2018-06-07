@@ -21,6 +21,9 @@ public interface MainContract {
         City sendCityFromEdit();
         void showProgressDialog(String message);
         void hideProgressDialog();
+        void editTemperatureItem(final int position);
+        void setFavoriItem(int position);
+        void deleteTemperatureItem(final int position);
     }
 
     /**
@@ -33,8 +36,10 @@ public interface MainContract {
         void callGeolocalisation();
         void addItemToList(Weather item);
         void addItemToList(List<Weather> items);
+        void deleteItemToList(int position);
         void getGeolocalisation(Location pos);
         City getUserCity();
+        void checkFavori(int position);
         void addTemperature();
     }
 }
