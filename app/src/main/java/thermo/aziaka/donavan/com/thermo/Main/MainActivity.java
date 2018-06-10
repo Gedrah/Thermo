@@ -3,13 +3,17 @@ package thermo.aziaka.donavan.com.thermo.Main;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -17,6 +21,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
@@ -32,6 +37,7 @@ import thermo.aziaka.donavan.com.thermo.Models.City;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.R;
 import thermo.aziaka.donavan.com.thermo.RecyclerView.TemperatureAdapter;
+import thermo.aziaka.donavan.com.thermo.Utils;
 
 
 public class MainActivity extends AppCompatActivity implements MainContract.View, View.OnClickListener {
@@ -41,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private Map<Integer, ClickEventsCallBack> clickEvents;
     private EditText country, city;
     private ProgressDialog progressDialog;
-    private TextView mainTemp, mainCity;
+    private TextView mainTemp, mainCity, toolBarTitle, mainDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +60,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     private void initViews() {
         FloatingActionButton mFab = findViewById(R.id.fab);
-        Button mGeoButton = findViewById(R.id.geo_button);
+        FloatingActionButton mGeoButton = findViewById(R.id.geo_button);
         mRecyclerView = findViewById(R.id.temperature_list);
+
         progressDialog = new ProgressDialog(this);
         mainTemp = findViewById(R.id.main_temp);
         mainCity = findViewById(R.id.main_city);
+        toolBarTitle = findViewById(R.id.toolbar_title);
+        mainDescription = findViewById(R.id.main_description);
 
         mFab.setOnClickListener(this);
         mGeoButton.setOnClickListener(this);
@@ -73,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mRecyclerView.setLayoutManager(ll);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(adapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     @Override
@@ -115,7 +126,19 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         Weather item = mPresenter.getWeatherItem(position);
         mainTemp.setText(String.format("%s°C", formatter.format(item.getMain().getTemp())));
-        mainCity.setText(String.format("%s", String.valueOf(item.getName())));
+        mainCity.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
+        toolBarTitle.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
+        mainDescription.setText(String.format("%s", Utils.getFrenchDescription(item.getWeather().get(0).getDescription())));
+    }
+
+    public void updateWidgetTemperature(Weather item) {
+        NumberFormat formatter = NumberFormat.getNumberInstance();
+        formatter.setMaximumFractionDigits(0);
+
+        mainTemp.setText(String.format("%s°C", formatter.format(item.getMain().getTemp())));
+        mainCity.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
+        toolBarTitle.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
+        mainDescription.setText(String.format("%s", Utils.getFrenchDescription(item.getWeather().get(0).getDescription())));
     }
 
     @Override

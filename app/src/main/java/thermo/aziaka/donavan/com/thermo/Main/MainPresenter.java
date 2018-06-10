@@ -2,13 +2,9 @@ package thermo.aziaka.donavan.com.thermo.Main;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.location.Location;
-import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -36,7 +32,7 @@ public class MainPresenter implements MainContract.Presenter {
         list = new ArrayList<>();
         adapter = new TemperatureAdapter(mView, list);
         mView.setRecyclerView(adapter);
-        List <String> newList = getWeatherListFromDatabase();
+        List <String> newList = Utils.getWeatherListFromDatabase((Context)mView);
         position = new Geolocal((Context)mView);
         if (newList != null)
             callWeatherAPI(newList);
@@ -84,7 +80,7 @@ public class MainPresenter implements MainContract.Presenter {
     public void addItemToList(Weather item) {
         list.add(item);
         adapter.updateTemperatureList(list);
-        saveWeatherList(list);
+        Utils.saveWeatherList(list, (Context)mView);
     }
 
     @Override
@@ -102,22 +98,20 @@ public class MainPresenter implements MainContract.Presenter {
         return list.get(position);
     }
 
-    public int getFavoriFromShared() {
-        return 0;
-    }
-
     @Override
     public void deleteItemToList(int position) {
         list.remove(position);
         adapter.updateTemperatureList(list);
-        saveWeatherList(list);
+        Utils.saveWeatherList(list, (Context)mView);
     }
 
     @Override
     public void addItemToList(List<Weather> items) {
         list = items;
         adapter.updateTemperatureList(list);
-        saveWeatherList(list);
+        Utils.saveWeatherList(list, (Context)mView);
+        if (!list.isEmpty())
+            mView.updateMainTemperature(0);
     }
 
     @Override
@@ -130,33 +124,8 @@ public class MainPresenter implements MainContract.Presenter {
         mView.addTemperatureItem();
     }
 
-    private void saveWeatherList(List<Weather> weatherList) {
-        List<String> list = new ArrayList<String>();
-        for (Weather w : weatherList) {
-            list.add(String.valueOf(w.getId()));
-        }
 
-        StringBuilder csvList = new StringBuilder();
-        for (String s : list){
-            csvList.append(s);
-            csvList.append(",");
-        }
 
-        SharedPreferences sharedPref = ((Context)mView).getSharedPreferences("WeatherList", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("WeatherList", csvList.toString());
-        editor.apply();
-    }
 
-    @Nullable
-    private List<String> getWeatherListFromDatabase() {
-        SharedPreferences sharedPref = ((Context)mView).getSharedPreferences("WeatherList", Context.MODE_PRIVATE);
-        String weatherList = sharedPref.getString("WeatherList", "");
-        Log.e("Datas", weatherList);
-        if (weatherList.equals(""))
-            return null;
-        String[] items = weatherList.split(",");
-        return Arrays.asList(items);
-    }
 
 }

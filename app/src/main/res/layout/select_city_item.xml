@@ -8,12 +8,16 @@
         android:id="@+id/city"
         android:hint="@string/ville"
         android:inputType="text"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <EditText
         android:hint="@string/pays"
         android:id="@+id/country"
         android:inputType="text"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

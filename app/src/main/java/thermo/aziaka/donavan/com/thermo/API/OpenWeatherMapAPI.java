@@ -40,6 +40,13 @@ public interface OpenWeatherMapAPI {
             @Query("appid") String id
     );
 
+    @GET("weather")
+    Call<Weather> getWeatherWidget(
+            @Query("id") String name,
+            @Query("units") String unit,
+            @Query("appid") String id
+    );
+
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(API_URL)
             .addConverterFactory(GsonConverterFactory.create())
