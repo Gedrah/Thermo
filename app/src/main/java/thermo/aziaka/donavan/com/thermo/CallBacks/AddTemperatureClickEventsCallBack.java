@@ -20,7 +20,11 @@ public class AddTemperatureClickEventsCallBack implements DialogInterface.OnClic
         City info = mPresenter.getUserCity();
         if (!TextUtils.isEmpty(info.getCity())){
             Log.e("Datas", info.getCity());
-            mPresenter.callWeatherAPI(info.getCity());
+            if (!TextUtils.isEmpty(info.getCountry())) {
+               mPresenter.callWeatherAPI(info.getCity() + "," + info.getCountry());
+            } else {
+                mPresenter.callWeatherAPI(info.getCity());
+            }
         }
     }
 
