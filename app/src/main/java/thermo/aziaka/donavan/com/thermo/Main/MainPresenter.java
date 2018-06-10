@@ -98,6 +98,10 @@ public class MainPresenter implements MainContract.Presenter {
         }
     }
 
+    public Weather getWeatherItem(int position) {
+        return list.get(position);
+    }
+
     public int getFavoriFromShared() {
         return 0;
     }

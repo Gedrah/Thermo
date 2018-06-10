@@ -23,6 +23,7 @@ public interface MainContract {
         void hideProgressDialog();
         void editTemperatureItem(final int position);
         void setFavoriItem(int position);
+        void updateMainTemperature(int position);
         void deleteTemperatureItem(final int position);
     }
 
@@ -38,6 +39,7 @@ public interface MainContract {
         void addItemToList(List<Weather> items);
         void deleteItemToList(int position);
         void getGeolocalisation(Location pos);
+        Weather getWeatherItem(int position);
         City getUserCity();
         void checkFavori(int position);
         void addTemperature();

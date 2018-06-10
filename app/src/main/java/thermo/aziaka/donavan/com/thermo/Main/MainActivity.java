@@ -16,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ import thermo.aziaka.donavan.com.thermo.CallBacks.EditTemperatureClickEventsCall
 import thermo.aziaka.donavan.com.thermo.CallBacks.FabClickEvents;
 import thermo.aziaka.donavan.com.thermo.CallBacks.GeoButtonClickEvents;
 import thermo.aziaka.donavan.com.thermo.Models.City;
+import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.R;
 import thermo.aziaka.donavan.com.thermo.RecyclerView.TemperatureAdapter;
 
@@ -36,9 +39,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private MainContract.Presenter mPresenter;
     private RecyclerView mRecyclerView;
     private Map<Integer, ClickEventsCallBack> clickEvents;
-    private EditText country;
-    private EditText city;
+    private EditText country, city;
     private ProgressDialog progressDialog;
+    private TextView mainTemp, mainCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         Button mGeoButton = findViewById(R.id.geo_button);
         mRecyclerView = findViewById(R.id.temperature_list);
         progressDialog = new ProgressDialog(this);
+        mainTemp = findViewById(R.id.main_temp);
+        mainCity = findViewById(R.id.main_city);
 
         mFab.setOnClickListener(this);
         mGeoButton.setOnClickListener(this);
@@ -102,6 +107,15 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .setNegativeButton("Annuler", new DismissClickEventsCallBack())
                 .setView(alertLayout);
         dialog.show();
+    }
+
+    public void updateMainTemperature(int position) {
+        NumberFormat formatter = NumberFormat.getNumberInstance();
+        formatter.setMaximumFractionDigits(0);
+
+        Weather item = mPresenter.getWeatherItem(position);
+        mainTemp.setText(String.format("%s°C", formatter.format(item.getMain().getTemp())));
+        mainCity.setText(String.format("%s", String.valueOf(item.getName())));
     }
 
     @Override
