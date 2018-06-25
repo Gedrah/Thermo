@@ -27,6 +27,9 @@ public class MainPresenter implements MainContract.Presenter {
     private TemperatureAdapter adapter;
     private MainContract.View mView;
 
+    // actualiser, placer en haut et editer la ville
+    // edit API call
+
     public MainPresenter(MainContract.View view) {
         mView = view;
         list = new ArrayList<>();
@@ -41,7 +44,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void callWeatherAPI(String city) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
-        Call<Weather> call = api.getWeather(city,"metric", APP_ID);
+        Call<Weather> call = api.getWeather(city,"metric", "fr",  APP_ID);
         call.enqueue(new WeatherCallBack(this, mView));
         mView.showProgressDialog("Chargement de la ville...");
     }
@@ -49,7 +52,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void callWeatherAPI(double lat, double lon) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
-        Call<Weather> call = api.getWeatherLocation(Double.toString(lat), Double.toString(lon),"metric", APP_ID);
+        Call<Weather> call = api.getWeatherLocation(Double.toString(lat), Double.toString(lon),"metric", "fr", APP_ID);
         call.enqueue(new WeatherCallBack(this, mView));
         mView.showProgressDialog("Chargement de la ville...");
     }
@@ -57,7 +60,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void callWeatherAPI(List<String> cities) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
-        Call<WeatherList> call = api.getWeatherList(Utils.createCityString(cities),"metric", APP_ID);
+        Call<WeatherList> call = api.getWeatherList(Utils.createCityString(cities),"metric", "fr", APP_ID);
         call.enqueue(new ListWeatherCallBack(this, mView));
         mView.showProgressDialog("Chargement de la ville...");
     }
@@ -123,9 +126,5 @@ public class MainPresenter implements MainContract.Presenter {
     public void addTemperature() {
         mView.addTemperatureItem();
     }
-
-
-
-
 
 }

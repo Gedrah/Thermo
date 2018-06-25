@@ -1,7 +1,5 @@
 package thermo.aziaka.donavan.com.thermo.API;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
@@ -22,6 +20,7 @@ public interface OpenWeatherMapAPI {
     Call<Weather> getWeather(
             @Query("q") String name,
             @Query("units") String unit,
+            @Query("lang") String fr,
             @Query("appid") String id
     );
 
@@ -30,6 +29,7 @@ public interface OpenWeatherMapAPI {
             @Query("lat") String lat,
             @Query("lon") String lon,
             @Query("units") String unit,
+            @Query("lang") String fr,
             @Query("appid") String id
     );
 
@@ -37,6 +37,7 @@ public interface OpenWeatherMapAPI {
     Call<WeatherList> getWeatherList(
             @Query("id") String list,
             @Query("units") String unit,
+            @Query("lang") String fr,
             @Query("appid") String id
     );
 
@@ -44,6 +45,7 @@ public interface OpenWeatherMapAPI {
     Call<Weather> getWeatherWidget(
             @Query("id") String name,
             @Query("units") String unit,
+            @Query("lang") String fr,
             @Query("appid") String id
     );
 

@@ -79,7 +79,7 @@ public class TempWidgetProvider extends AppWidgetProvider {
     public void callWeatherAPIFromWidget(String city, Context context) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
         Log.e("It doesn't works ?", "Current string " + city);
-        Call<Weather> call = api.getWeatherWidget(city,"metric", APP_ID);
+        Call<Weather> call = api.getWeatherWidget(city,"metric", "fr", APP_ID);
         call.enqueue(new WidgetWeatherCallBack(context, this));
     }
 

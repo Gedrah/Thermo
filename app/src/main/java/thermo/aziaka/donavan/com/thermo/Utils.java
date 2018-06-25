@@ -15,20 +15,6 @@ import thermo.aziaka.donavan.com.thermo.Models.Weather;
 
 public class Utils {
 
-    public static Map<String, String> description = new HashMap<String, String>(){
-        {
-            put("clear sky", "Ciel Clair");
-            put("few clouds", "Quelques nuages");
-            put("scattered clouds", "Nuages épars");
-            put("broken clouds", "Nuages fragmentés");
-            put("shower rain", "Averses de pluie");
-            put("rain", "Précipitation");
-            put("thunderstorm", "Orage");
-            put("snow", "Neige");
-            put("mist", "Brouillard");
-        }
-    };
-
     public static String createCityString(List<String> cities) {
         StringBuilder allCities = new StringBuilder();
         for (int i = 0; i < cities.size(); i++) {
@@ -38,11 +24,6 @@ public class Utils {
             }
         }
         return allCities.toString();
-    }
-
-
-    public static String getFrenchDescription(String desc) {
-        return description.get(desc);
     }
 
     public static void saveWeatherList(List<Weather> weatherList, Context context) {

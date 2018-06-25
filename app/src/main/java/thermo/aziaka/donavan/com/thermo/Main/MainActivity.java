@@ -3,16 +3,17 @@ package thermo.aziaka.donavan.com.thermo.Main;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private EditText country, city;
     private ProgressDialog progressDialog;
     private TextView mainTemp, mainCity, toolBarTitle, mainDescription;
+    private AppBarLayout appBarLayout;
+    private final static int SCROLL_DOWN = -580;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mainCity = findViewById(R.id.main_city);
         toolBarTitle = findViewById(R.id.toolbar_title);
         mainDescription = findViewById(R.id.main_description);
+        appBarLayout = findViewById(R.id.appBar);
 
         mFab.setOnClickListener(this);
         mGeoButton.setOnClickListener(this);
@@ -75,6 +79,21 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         clickEvents = new HashMap<>();
         clickEvents.put(R.id.fab, new FabClickEvents());
         clickEvents.put(R.id.geo_button, new GeoButtonClickEvents());
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                Log.e("Scroll", String.valueOf(verticalOffset));
+                if (verticalOffset <= SCROLL_DOWN) {
+                    toolBarTitle.setVisibility(View.VISIBLE);
+                    mainDescription.setVisibility(View.INVISIBLE);
+                    mainCity.setVisibility(View.INVISIBLE);
+                } else {
+                    toolBarTitle.setVisibility(View.GONE);
+                    mainDescription.setVisibility(View.VISIBLE);
+                    mainCity.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     public void setRecyclerView(TemperatureAdapter adapter) {
@@ -128,17 +147,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mainTemp.setText(String.format("%s°C", formatter.format(item.getMain().getTemp())));
         mainCity.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
         toolBarTitle.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
-        mainDescription.setText(String.format("%s", Utils.getFrenchDescription(item.getWeather().get(0).getDescription())));
-    }
-
-    public void updateWidgetTemperature(Weather item) {
-        NumberFormat formatter = NumberFormat.getNumberInstance();
-        formatter.setMaximumFractionDigits(0);
-
-        mainTemp.setText(String.format("%s°C", formatter.format(item.getMain().getTemp())));
-        mainCity.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
-        toolBarTitle.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
-        mainDescription.setText(String.format("%s", Utils.getFrenchDescription(item.getWeather().get(0).getDescription())));
+        mainDescription.setText(String.format("%s", item.getWeather().get(0).getDescription()));
     }
 
     @Override
@@ -172,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void getTemperatureLocalisation(final Location pos) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this)
-                .setTitle("Activer la Geolocalisation")
+                .setTitle("Ajouter la météo de votre position actuelle ?")
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
