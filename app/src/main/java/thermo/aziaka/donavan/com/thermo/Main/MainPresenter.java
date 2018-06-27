@@ -9,6 +9,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import thermo.aziaka.donavan.com.thermo.API.OpenWeatherMapAPI;
+import thermo.aziaka.donavan.com.thermo.CallBacks.EditWeatherCallBack;
 import thermo.aziaka.donavan.com.thermo.CallBacks.ListWeatherCallBack;
 import thermo.aziaka.donavan.com.thermo.CallBacks.WeatherCallBack;
 import thermo.aziaka.donavan.com.thermo.Geolocal;
@@ -39,6 +40,14 @@ public class MainPresenter implements MainContract.Presenter {
         position = new Geolocal((Context)mView);
         if (newList != null)
             callWeatherAPI(newList);
+    }
+
+    @Override
+    public void callWeatherAPI(String city, int position) {
+        OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
+        Call<Weather> call = api.getWeather(city,"metric", "fr",  APP_ID);
+        call.enqueue(new EditWeatherCallBack(this, mView, position));
+        mView.showProgressDialog("Chargement de la ville...");
     }
 
     @Override
@@ -77,6 +86,12 @@ public class MainPresenter implements MainContract.Presenter {
         } else {
             mView.showMessage("Localisation", "Veuillez activer la géolocalisation pour continuer.");
         }
+    }
+
+    public void editItemToList(Weather item, int position) {
+        list.set(position, item);
+        adapter.updateTemperatureList(list);
+        Utils.saveWeatherList(list, (Context)mView);
     }
 
     @Override

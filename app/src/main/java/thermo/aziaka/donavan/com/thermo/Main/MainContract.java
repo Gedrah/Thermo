@@ -34,9 +34,11 @@ public interface MainContract {
         void callWeatherAPI(String city);
         void callWeatherAPI(double lat, double lon);
         void callWeatherAPI(List<String> cities);
+        void callWeatherAPI(String city, int position);
         void callGeolocalisation();
         void addItemToList(Weather item);
         void addItemToList(List<Weather> items);
+        void editItemToList(Weather item, int position);
         void deleteItemToList(int position);
         void getGeolocalisation(Location pos);
         Weather getWeatherItem(int position);
