@@ -35,8 +35,6 @@ public class TempWidgetProvider extends AppWidgetProvider {
 
         views = new RemoteViews(context.getPackageName(), R.layout.temp_widget);
         idsWidgets = Utils.getWidgetListFromDatabase(context);
-        // find your TextView here by id here and update it.
-
         callWeatherAPIFromWidget(Utils.getWeatherListFromDatabase(context).get(0), context);
     }
 

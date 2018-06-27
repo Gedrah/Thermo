@@ -21,8 +21,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
+
+import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
@@ -34,6 +37,7 @@ import thermo.aziaka.donavan.com.thermo.CallBacks.DismissClickEventsCallBack;
 import thermo.aziaka.donavan.com.thermo.CallBacks.EditTemperatureClickEventsCallBack;
 import thermo.aziaka.donavan.com.thermo.CallBacks.FabClickEvents;
 import thermo.aziaka.donavan.com.thermo.CallBacks.GeoButtonClickEvents;
+import thermo.aziaka.donavan.com.thermo.Constant;
 import thermo.aziaka.donavan.com.thermo.Models.City;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.R;
@@ -82,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                Log.e("Scroll", String.valueOf(verticalOffset));
                 if (verticalOffset <= SCROLL_DOWN) {
                     toolBarTitle.setVisibility(View.VISIBLE);
                     mainDescription.setVisibility(View.INVISIBLE);

@@ -110,6 +110,11 @@ public class MainPresenter implements MainContract.Presenter {
                 list.get(i).setFavori(false);
             }
         }
+        Weather item = list.get(position);
+        list.remove(position);
+        list.add(0, item);
+        adapter.updateTemperatureList(list);
+        Utils.saveWeatherList(list, (Context)mView);
     }
 
     public Weather getWeatherItem(int position) {

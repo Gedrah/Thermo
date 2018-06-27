@@ -17,6 +17,6 @@ public class FavoriClickEventsCallBack implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         mView.setFavoriItem(position);
-        mView.updateMainTemperature(position);
+        mView.updateMainTemperature(0);
     }
 }
