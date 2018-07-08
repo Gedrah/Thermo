@@ -14,7 +14,7 @@ import java.text.NumberFormat;
 
 import retrofit2.Call;
 import thermo.aziaka.donavan.com.thermo.API.OpenWeatherMapAPI;
-import thermo.aziaka.donavan.com.thermo.CallBacks.WidgetWeatherCallBack;
+import thermo.aziaka.donavan.com.thermo.CallBacks.APICallBack.WidgetWeatherCallBack;
 import thermo.aziaka.donavan.com.thermo.Constant;
 import thermo.aziaka.donavan.com.thermo.Main.MainActivity;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;

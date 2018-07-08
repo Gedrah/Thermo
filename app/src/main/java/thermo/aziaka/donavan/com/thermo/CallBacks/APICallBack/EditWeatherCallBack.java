@@ -1,4 +1,4 @@
-package thermo.aziaka.donavan.com.thermo.CallBacks;
+package thermo.aziaka.donavan.com.thermo.CallBacks.APICallBack;
 
 import android.util.Log;
 
@@ -29,7 +29,7 @@ public class EditWeatherCallBack implements Callback<Weather> {
             context.editItemToList(response.body(), position);
         } else {
             Log.e("ResponseValid", response.message());
-            mView.showMessage("Erreur", "Votre ville n'existe pas.");
+            mView.showMessage("Erreur", "Votre ville n'existe pas. Veuillez écrire le nom de votre ville en anglais.");
         }
         mView.hideProgressDialog();
     }

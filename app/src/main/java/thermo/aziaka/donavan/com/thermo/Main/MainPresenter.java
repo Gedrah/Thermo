@@ -9,9 +9,9 @@ import java.util.List;
 
 import retrofit2.Call;
 import thermo.aziaka.donavan.com.thermo.API.OpenWeatherMapAPI;
-import thermo.aziaka.donavan.com.thermo.CallBacks.EditWeatherCallBack;
-import thermo.aziaka.donavan.com.thermo.CallBacks.ListWeatherCallBack;
-import thermo.aziaka.donavan.com.thermo.CallBacks.WeatherCallBack;
+import thermo.aziaka.donavan.com.thermo.CallBacks.APICallBack.EditWeatherCallBack;
+import thermo.aziaka.donavan.com.thermo.CallBacks.APICallBack.ListWeatherCallBack;
+import thermo.aziaka.donavan.com.thermo.CallBacks.APICallBack.WeatherCallBack;
 import thermo.aziaka.donavan.com.thermo.Geolocal;
 import thermo.aziaka.donavan.com.thermo.Models.City;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;

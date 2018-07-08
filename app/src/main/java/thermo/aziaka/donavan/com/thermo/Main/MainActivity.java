@@ -6,43 +6,33 @@ import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
-
-import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import thermo.aziaka.donavan.com.thermo.CallBacks.AddTemperatureClickEventsCallBack;
-import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEventsCallBack;
-import thermo.aziaka.donavan.com.thermo.CallBacks.DismissClickEventsCallBack;
-import thermo.aziaka.donavan.com.thermo.CallBacks.EditTemperatureClickEventsCallBack;
-import thermo.aziaka.donavan.com.thermo.CallBacks.FabClickEvents;
-import thermo.aziaka.donavan.com.thermo.CallBacks.GeoButtonClickEvents;
-import thermo.aziaka.donavan.com.thermo.Constant;
+import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.AddTemperatureClickEventsCallBack;
+import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.ClickEventsCallBack;
+import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.DismissClickEventsCallBack;
+import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.EditTemperatureClickEventsCallBack;
+import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.FabClickEvents;
+import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.GeoButtonClickEvents;
 import thermo.aziaka.donavan.com.thermo.Models.City;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.R;
 import thermo.aziaka.donavan.com.thermo.RecyclerView.TemperatureAdapter;
-import thermo.aziaka.donavan.com.thermo.Utils;
 
 
 public class MainActivity extends AppCompatActivity implements MainContract.View, View.OnClickListener {
@@ -100,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 }
             }
         });
+
     }
 
     public void setRecyclerView(TemperatureAdapter adapter) {

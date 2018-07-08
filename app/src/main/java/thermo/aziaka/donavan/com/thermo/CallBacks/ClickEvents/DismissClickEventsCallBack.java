@@ -1,4 +1,4 @@
-package thermo.aziaka.donavan.com.thermo.CallBacks;
+package thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents;
 
 import android.content.DialogInterface;
 
