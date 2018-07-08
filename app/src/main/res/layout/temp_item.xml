@@ -20,7 +20,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
+            android:layout_weight="4"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/city"
@@ -33,7 +33,7 @@
                 android:scrollHorizontally="true"
                 android:text="city"
                 android:textColor="@color/blackColor"
-                android:textSize="24dp" />
+                android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/country"
@@ -42,6 +42,14 @@
                 android:text="country"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/blackColor"
+                android:textSize="16dp" />
+            <TextView
+                android:id="@+id/state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="state"
+                android:layout_marginStart="16dp"
+                android:textColor="@color/gray"
                 android:textSize="16dp" />
         </LinearLayout>
         <TextView
@@ -52,14 +60,15 @@
             android:layout_marginStart="16dp"
             android:layout_weight="2"
             android:text="38°C"
+            android:textAlignment="center"
             android:textColor="@color/blackColor"
-            android:textSize="24dp" />
+            android:textSize="21dp" />
         <ImageButton
             android:id="@+id/delete_temp"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_delete_black_24dp"
+            android:src="@drawable/ic_refresh_black_24dp"
             android:layout_gravity="center"
             android:layout_height="wrap_content" />
     </LinearLayout>

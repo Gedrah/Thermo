@@ -25,6 +25,7 @@ public interface MainContract {
         void setFavoriItem(int position);
         void updateMainTemperature(int position);
         void deleteTemperatureItem(final int position);
+        void refreshTemperature(int position);
     }
 
     /**

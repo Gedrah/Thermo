@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private ProgressDialog progressDialog;
     private TextView mainTemp, mainCity, toolBarTitle, mainDescription;
     private AppBarLayout appBarLayout;
+    private android.support.v7.widget.Toolbar toolbar;
     private final static int SCROLL_DOWN = -580;
 
     @Override
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         toolBarTitle = findViewById(R.id.toolbar_title);
         mainDescription = findViewById(R.id.main_description);
         appBarLayout = findViewById(R.id.appBar);
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.menu_main);
 
         mFab.setOnClickListener(this);
         mGeoButton.setOnClickListener(this);
@@ -150,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mainTemp.setText(String.format("%s°C", formatter.format(item.getMain().getTemp())));
         mainCity.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
         toolBarTitle.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
-        mainDescription.setText(String.format("%s", item.getWeather().get(0).getDescription()));
+        mainDescription.setText(String.format("%s", item.getWeather().get(item.getWeather().size() - 1).getDescription()));
     }
 
     @Override
@@ -165,6 +168,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 })
                 .setNegativeButton("Non", new DismissClickEventsCallBack());
         dialog.show();
+    }
+
+    @Override
+    public void refreshTemperature(int position) {
+        Weather item = mPresenter.getWeatherItem(position);
+        mPresenter.callWeatherAPI(item.getName(), position);
     }
 
     @Override
