@@ -1,10 +1,12 @@
 package thermo.aziaka.donavan.com.thermo.Main;
 
+import android.graphics.Bitmap;
 import android.location.Location;
 
 import java.util.List;
 
 import thermo.aziaka.donavan.com.thermo.Models.City;
+import thermo.aziaka.donavan.com.thermo.Models.GooglePhotos;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.RecyclerView.TemperatureAdapter;
 
@@ -26,6 +28,7 @@ public interface MainContract {
         void updateMainTemperature(int position);
         void deleteTemperatureItem(final int position);
         void refreshTemperature(int position);
+        void setFavoriBackgroundImage(Bitmap URL);
     }
 
     /**
@@ -36,6 +39,8 @@ public interface MainContract {
         void callWeatherAPI(double lat, double lon);
         void callWeatherAPI(List<String> cities);
         void callWeatherAPI(String city, int position);
+        void callPlaceAPI(double lat, double lon);
+        void callPhotoAPI(String PhotoReference);
         void callGeolocalisation();
         void addItemToList(Weather item);
         void addItemToList(List<Weather> items);

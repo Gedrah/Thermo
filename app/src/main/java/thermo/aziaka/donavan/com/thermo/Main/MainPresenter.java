@@ -2,24 +2,36 @@ package thermo.aziaka.donavan.com.thermo.Main;
 
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.location.Location;
+import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import thermo.aziaka.donavan.com.thermo.API.GooglePlacesAPI;
 import thermo.aziaka.donavan.com.thermo.API.OpenWeatherMapAPI;
 import thermo.aziaka.donavan.com.thermo.CallBacks.APICallBack.EditWeatherCallBack;
 import thermo.aziaka.donavan.com.thermo.CallBacks.APICallBack.ListWeatherCallBack;
 import thermo.aziaka.donavan.com.thermo.CallBacks.APICallBack.WeatherCallBack;
 import thermo.aziaka.donavan.com.thermo.Geolocal;
 import thermo.aziaka.donavan.com.thermo.Models.City;
+import thermo.aziaka.donavan.com.thermo.Models.GooglePlaces;
+import thermo.aziaka.donavan.com.thermo.Models.GooglePlacesObject;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.Models.WeatherList;
 import thermo.aziaka.donavan.com.thermo.RecyclerView.TemperatureAdapter;
 import thermo.aziaka.donavan.com.thermo.Utils;
 
 import static thermo.aziaka.donavan.com.thermo.Constant.APP_ID;
+import static thermo.aziaka.donavan.com.thermo.Constant.GOOGLE_PLACES_API_KEY;
 
 public class MainPresenter implements MainContract.Presenter {
 
@@ -48,6 +60,58 @@ public class MainPresenter implements MainContract.Presenter {
         Call<Weather> call = api.getWeather(city,"metric", "fr",  APP_ID);
         call.enqueue(new EditWeatherCallBack(this, mView, position));
         mView.showProgressDialog("Chargement de la ville...");
+    }
+
+    @Override
+    public void callPlaceAPI(double lat, double lon) {
+        Log.e("Datas Place", "it passes here atleast");
+        GooglePlacesAPI api = GooglePlacesAPI.retrofit.create(GooglePlacesAPI.class);
+        Call<GooglePlacesObject> call = api.getGooglePlace(lat + "," + lon, "5000", GOOGLE_PLACES_API_KEY);
+        call.enqueue(new Callback<GooglePlacesObject>() {
+            @Override
+            public void onResponse(Call<GooglePlacesObject> call, Response<GooglePlacesObject> response) {
+                Log.e("Datas Place", "it works ?");
+                Log.e("Datas Place", String.valueOf(response.raw()));
+                Log.e("Datas Place", String.valueOf(response.body().getPlaces().get(0).getPhotos().get(0).getPhoto_reference()));
+                callPhotoAPI(response.body().getPlaces().get(0).getPhotos().get(0).getPhoto_reference());
+            }
+
+            @Override
+            public void onFailure(Call<GooglePlacesObject> call, Throwable t) {
+                Log.e("Datas Place", "it doesn't works ?");
+                Log.e("Datas Place", t.getMessage());
+                mView.hideProgressDialog();
+            }
+        });
+        mView.showProgressDialog("Chargement de l'image...");
+    }
+
+    @Override
+    public void callPhotoAPI(String PhotoReference) {
+        Log.e("Datas Place", "it passes here atleast photo");
+        WindowManager wm = (WindowManager) ((Context)mView).getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        GooglePlacesAPI api = GooglePlacesAPI.retrofit.create(GooglePlacesAPI.class);
+        Call<ResponseBody> call = api.getGooglePlacePhoto(String.valueOf(width), PhotoReference, GOOGLE_PLACES_API_KEY);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.e("Datas Place", "it works photo?");
+                Log.e("Datas Place", response.message());
+                Log.e("Datas Place", String.valueOf(response.body()));
+                mView.hideProgressDialog();
+                mView.setFavoriBackgroundImage(BitmapFactory.decodeStream(response.body().byteStream()));
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("Datas Place", "it doesn't works photo ?");
+                Log.e("Datas Place", t.getMessage());
+                mView.hideProgressDialog();
+            }
+        });
     }
 
     @Override

@@ -2,7 +2,11 @@ package thermo.aziaka.donavan.com.thermo.Main;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.UriMatcher;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -12,12 +16,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
@@ -30,6 +38,7 @@ import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.EditTemperatureCli
 import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.FabClickEvents;
 import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.GeoButtonClickEvents;
 import thermo.aziaka.donavan.com.thermo.Models.City;
+import thermo.aziaka.donavan.com.thermo.Models.GooglePhotos;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.R;
 import thermo.aziaka.donavan.com.thermo.RecyclerView.TemperatureAdapter;
@@ -43,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private EditText country, city;
     private ProgressDialog progressDialog;
     private TextView mainTemp, mainCity, toolBarTitle, mainDescription;
-    private AppBarLayout appBarLayout;
     private android.support.v7.widget.Toolbar toolbar;
+    private AppBarLayout appBarLayout;
     private final static int SCROLL_DOWN = -580;
 
     @Override
@@ -54,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         initViews();
         mPresenter = new MainPresenter(this);
+        mPresenter.callPlaceAPI(-33.8670522, 151.1957362);
     }
 
     private void initViews() {
@@ -165,6 +175,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     public void refreshTemperature(int position) {
         Weather item = mPresenter.getWeatherItem(position);
         mPresenter.callWeatherAPI(item.getName(), position);
+    }
+
+    @Override
+    public void setFavoriBackgroundImage(Bitmap URL) {
+        appBarLayout.setBackground(new BitmapDrawable(getResources(), URL));
     }
 
     @Override
