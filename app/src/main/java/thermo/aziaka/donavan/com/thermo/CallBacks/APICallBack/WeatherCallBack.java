@@ -29,6 +29,7 @@ public class WeatherCallBack implements Callback<Weather> {
         Log.e("header", response.headers().toString());
         if (response.isSuccessful()) {
             Log.e("Datas", response.body().toString());
+            Log.e("Datas Place", String.valueOf(response.raw()));
             context.addItemToList(response.body());
         } else {
             Log.e("ResponseValid", response.message());

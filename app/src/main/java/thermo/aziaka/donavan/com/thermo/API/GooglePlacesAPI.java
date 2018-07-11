@@ -1,6 +1,5 @@
 package thermo.aziaka.donavan.com.thermo.API;
 
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;

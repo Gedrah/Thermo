@@ -38,7 +38,6 @@ import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.EditTemperatureCli
 import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.FabClickEvents;
 import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.GeoButtonClickEvents;
 import thermo.aziaka.donavan.com.thermo.Models.City;
-import thermo.aziaka.donavan.com.thermo.Models.GooglePhotos;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.R;
 import thermo.aziaka.donavan.com.thermo.RecyclerView.TemperatureAdapter;
@@ -63,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         initViews();
         mPresenter = new MainPresenter(this);
-        mPresenter.callPlaceAPI(-33.8670522, 151.1957362);
     }
 
     private void initViews() {
@@ -120,6 +118,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.refresh_city:
+                updateMainTemperature(0);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -155,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mainCity.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
         toolBarTitle.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
         mainDescription.setText(String.format("%s", item.getWeather().get(item.getWeather().size() - 1).getDescription()));
+        mPresenter.callPlaceAPI(item.getCoord().getLon(), item.getCoord().getLan());
     }
 
     @Override
@@ -165,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mPresenter.deleteItemToList(position);
+                        if (position == 0) {
+                            updateMainTemperature(position);
+                        }
                     }
                 })
                 .setNegativeButton("Non", new DismissClickEventsCallBack());
@@ -180,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void setFavoriBackgroundImage(Bitmap URL) {
         appBarLayout.setBackground(new BitmapDrawable(getResources(), URL));
+        hideProgressDialog();
     }
 
     @Override
@@ -236,5 +245,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     public void setFavoriItem(int position) {
         mPresenter.checkFavori(position);
     }
+
 
 }

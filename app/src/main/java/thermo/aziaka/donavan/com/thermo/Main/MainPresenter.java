@@ -63,10 +63,10 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void callPlaceAPI(double lat, double lon) {
-        Log.e("Datas Place", "it passes here atleast");
+    public void callPlaceAPI(float lon, float lat) {
+        Log.e("Datas Place", "it passes here atleast" + lon + " : " + lat);
         GooglePlacesAPI api = GooglePlacesAPI.retrofit.create(GooglePlacesAPI.class);
-        Call<GooglePlacesObject> call = api.getGooglePlace(lat + "," + lon, "5000", GOOGLE_PLACES_API_KEY);
+        Call<GooglePlacesObject> call = api.getGooglePlace(Float.toString(lat) + "," + Float.toString(lon), "5000", GOOGLE_PLACES_API_KEY);
         call.enqueue(new Callback<GooglePlacesObject>() {
             @Override
             public void onResponse(Call<GooglePlacesObject> call, Response<GooglePlacesObject> response) {
@@ -88,6 +88,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void callPhotoAPI(String PhotoReference) {
+        mView.showProgressDialog("Chargement de l'image...");
         Log.e("Datas Place", "it passes here atleast photo");
         WindowManager wm = (WindowManager) ((Context)mView).getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -102,7 +103,6 @@ public class MainPresenter implements MainContract.Presenter {
                 Log.e("Datas Place", "it works photo?");
                 Log.e("Datas Place", response.message());
                 Log.e("Datas Place", String.valueOf(response.body()));
-                mView.hideProgressDialog();
                 mView.setFavoriBackgroundImage(BitmapFactory.decodeStream(response.body().byteStream()));
             }
             @Override
@@ -160,9 +160,10 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void addItemToList(Weather item) {
-        list.add(item);
+        list.set(0, item);
         adapter.updateTemperatureList(list);
         Utils.saveWeatherList(list, (Context)mView);
+        mView.updateMainTemperature(0);
     }
 
     @Override

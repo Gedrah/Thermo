@@ -6,7 +6,7 @@ package thermo.aziaka.donavan.com.thermo.Models;
 
 public class Coord {
     private float lon;
-    private float lan;
+    private float lat;
 
     public float getLon() {
         return lon;
@@ -17,10 +17,10 @@ public class Coord {
     }
 
     public float getLan() {
-        return lan;
+        return lat;
     }
 
     public void setLan(float lan) {
-        this.lan = lan;
+        this.lat = lan;
     }
 }
