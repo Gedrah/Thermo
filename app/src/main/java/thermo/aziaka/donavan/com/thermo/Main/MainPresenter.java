@@ -48,8 +48,13 @@ public class MainPresenter implements MainContract.Presenter {
         list = new ArrayList<>();
         adapter = new TemperatureAdapter(mView, list);
         mView.setRecyclerView(adapter);
-        List <String> newList = Utils.getWeatherListFromDatabase((Context)mView);
-        position = new Geolocal((Context)mView);
+        position = new Geolocal((Context) mView);
+        updateWeatherList();
+    }
+
+    @Override
+    public void updateWeatherList() {
+        List<String> newList = Utils.getWeatherListFromDatabase((Context) mView);
         if (newList != null)
             callWeatherAPI(newList);
     }
@@ -57,40 +62,34 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void callWeatherAPI(String city, int position) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
-        Call<Weather> call = api.getWeather(city,"metric", "fr",  APP_ID);
+        Call<Weather> call = api.getWeather(city, "metric", "fr", APP_ID);
         call.enqueue(new EditWeatherCallBack(this, mView, position));
         mView.showProgressDialog("Chargement de la ville...");
     }
 
     @Override
     public void callPlaceAPI(float lon, float lat) {
-        Log.e("Datas Place", "it passes here atleast" + lon + " : " + lat);
+        mView.showProgressDialog("Chargement de l'image...");
         GooglePlacesAPI api = GooglePlacesAPI.retrofit.create(GooglePlacesAPI.class);
         Call<GooglePlacesObject> call = api.getGooglePlace(Float.toString(lat) + "," + Float.toString(lon), "5000", GOOGLE_PLACES_API_KEY);
         call.enqueue(new Callback<GooglePlacesObject>() {
             @Override
             public void onResponse(Call<GooglePlacesObject> call, Response<GooglePlacesObject> response) {
-                Log.e("Datas Place", "it works ?");
-                Log.e("Datas Place", String.valueOf(response.raw()));
-                Log.e("Datas Place", String.valueOf(response.body().getPlaces().get(0).getPhotos().get(0).getPhoto_reference()));
                 callPhotoAPI(response.body().getPlaces().get(0).getPhotos().get(0).getPhoto_reference());
             }
 
             @Override
             public void onFailure(Call<GooglePlacesObject> call, Throwable t) {
-                Log.e("Datas Place", "it doesn't works ?");
-                Log.e("Datas Place", t.getMessage());
+                mView.showMessage("Erreur", "Aucune image n'a été trouvé pour cette localisation.");
                 mView.hideProgressDialog();
             }
         });
-        mView.showProgressDialog("Chargement de l'image...");
     }
 
     @Override
     public void callPhotoAPI(String PhotoReference) {
         mView.showProgressDialog("Chargement de l'image...");
-        Log.e("Datas Place", "it passes here atleast photo");
-        WindowManager wm = (WindowManager) ((Context)mView).getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) ((Context) mView).getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -100,15 +99,12 @@ public class MainPresenter implements MainContract.Presenter {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.e("Datas Place", "it works photo?");
-                Log.e("Datas Place", response.message());
-                Log.e("Datas Place", String.valueOf(response.body()));
                 mView.setFavoriBackgroundImage(BitmapFactory.decodeStream(response.body().byteStream()));
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("Datas Place", "it doesn't works photo ?");
-                Log.e("Datas Place", t.getMessage());
+                mView.showMessage("Erreur", "Aucune image n'a été trouvé pour cette localisation.");
                 mView.hideProgressDialog();
             }
         });
@@ -117,7 +113,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void callWeatherAPI(String city) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
-        Call<Weather> call = api.getWeather(city,"metric", "fr",  APP_ID);
+        Call<Weather> call = api.getWeather(city, "metric", "fr", APP_ID);
         call.enqueue(new WeatherCallBack(this, mView));
         mView.showProgressDialog("Chargement de la ville...");
     }
@@ -125,7 +121,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void callWeatherAPI(double lat, double lon) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
-        Call<Weather> call = api.getWeatherLocation(Double.toString(lat), Double.toString(lon),"metric", "fr", APP_ID);
+        Call<Weather> call = api.getWeatherLocation(Double.toString(lat), Double.toString(lon), "metric", "fr", APP_ID);
         call.enqueue(new WeatherCallBack(this, mView));
         mView.showProgressDialog("Chargement de la ville...");
     }
@@ -133,7 +129,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void callWeatherAPI(List<String> cities) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
-        Call<WeatherList> call = api.getWeatherList(Utils.createCityString(cities),"metric", "fr", APP_ID);
+        Call<WeatherList> call = api.getWeatherList(Utils.createCityString(cities), "metric", "fr", APP_ID);
         call.enqueue(new ListWeatherCallBack(this, mView));
         mView.showProgressDialog("Chargement de la ville...");
     }
@@ -155,14 +151,14 @@ public class MainPresenter implements MainContract.Presenter {
     public void editItemToList(Weather item, int position) {
         list.set(position, item);
         adapter.updateTemperatureList(list);
-        Utils.saveWeatherList(list, (Context)mView);
+        Utils.saveWeatherList(list, (Context) mView);
     }
 
     @Override
     public void addItemToList(Weather item) {
-        list.set(0, item);
+        list.add(0, item);
         adapter.updateTemperatureList(list);
-        Utils.saveWeatherList(list, (Context)mView);
+        Utils.saveWeatherList(list, (Context) mView);
         mView.updateMainTemperature(0);
     }
 
@@ -179,7 +175,7 @@ public class MainPresenter implements MainContract.Presenter {
         list.remove(position);
         list.add(0, item);
         adapter.updateTemperatureList(list);
-        Utils.saveWeatherList(list, (Context)mView);
+        Utils.saveWeatherList(list, (Context) mView);
     }
 
     public Weather getWeatherItem(int position) {
@@ -190,14 +186,14 @@ public class MainPresenter implements MainContract.Presenter {
     public void deleteItemToList(int position) {
         list.remove(position);
         adapter.updateTemperatureList(list);
-        Utils.saveWeatherList(list, (Context)mView);
+        Utils.saveWeatherList(list, (Context) mView);
     }
 
     @Override
     public void addItemToList(List<Weather> items) {
         list = items;
         adapter.updateTemperatureList(list);
-        Utils.saveWeatherList(list, (Context)mView);
+        Utils.saveWeatherList(list, (Context) mView);
         if (!list.isEmpty())
             mView.updateMainTemperature(0);
     }

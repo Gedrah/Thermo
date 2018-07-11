@@ -2,15 +2,14 @@ package thermo.aziaka.donavan.com.thermo.Main;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.UriMatcher;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -18,14 +17,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
@@ -37,6 +34,7 @@ import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.DismissClickEvents
 import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.EditTemperatureClickEventsCallBack;
 import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.FabClickEvents;
 import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.GeoButtonClickEvents;
+import thermo.aziaka.donavan.com.thermo.CallBacks.ClickEvents.RefreshClickEvent;
 import thermo.aziaka.donavan.com.thermo.Models.City;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.R;
@@ -51,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private EditText country, city;
     private ProgressDialog progressDialog;
     private TextView mainTemp, mainCity, toolBarTitle, mainDescription;
-    private android.support.v7.widget.Toolbar toolbar;
     private AppBarLayout appBarLayout;
     private final static int SCROLL_DOWN = -580;
 
@@ -67,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private void initViews() {
         FloatingActionButton mFab = findViewById(R.id.fab);
         FloatingActionButton mGeoButton = findViewById(R.id.geo_button);
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         mRecyclerView = findViewById(R.id.temperature_list);
 
         progressDialog = new ProgressDialog(this);
@@ -75,15 +73,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         toolBarTitle = findViewById(R.id.toolbar_title);
         mainDescription = findViewById(R.id.main_description);
         appBarLayout = findViewById(R.id.appBar);
-        toolbar = findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
 
         mFab.setOnClickListener(this);
         mGeoButton.setOnClickListener(this);
+        toolbar.findViewById(R.id.refresh_city).setOnClickListener(this);
+
 
         clickEvents = new HashMap<>();
         clickEvents.put(R.id.fab, new FabClickEvents());
         clickEvents.put(R.id.geo_button, new GeoButtonClickEvents());
+        clickEvents.put(R.id.refresh_city, new RefreshClickEvent());
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 }
             }
         });
-
     }
 
     public void setRecyclerView(TemperatureAdapter adapter) {
@@ -113,17 +112,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
-            case R.id.refresh_city:
-                updateMainTemperature(0);
-                return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -159,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mainCity.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
         toolBarTitle.setText(String.format("%s", String.valueOf(item.getName() + ", " + item.getSys().getCountry())));
         mainDescription.setText(String.format("%s", item.getWeather().get(item.getWeather().size() - 1).getDescription()));
+        appBarLayout.setBackgroundResource(R.color.colorPrimary);
         mPresenter.callPlaceAPI(item.getCoord().getLon(), item.getCoord().getLan());
     }
 

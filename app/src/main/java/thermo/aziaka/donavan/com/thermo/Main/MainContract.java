@@ -42,6 +42,7 @@ public interface MainContract {
         void callPlaceAPI(float lat, float lon);
         void callPhotoAPI(String PhotoReference);
         void callGeolocalisation();
+        void updateWeatherList();
         void addItemToList(Weather item);
         void addItemToList(List<Weather> items);
         void editItemToList(Weather item, int position);

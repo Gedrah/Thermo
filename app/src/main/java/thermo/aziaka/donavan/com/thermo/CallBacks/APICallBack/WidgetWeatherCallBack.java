@@ -3,7 +3,6 @@ package thermo.aziaka.donavan.com.thermo.CallBacks.APICallBack;
 import android.content.Context;
 import android.util.Log;
 
-import java.util.Arrays;
 
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,18 +21,15 @@ public class WidgetWeatherCallBack implements Callback<Weather> {
 
     @Override
     public void onResponse(retrofit2.Call<Weather> call, Response<Weather> response) {
-        Log.e("header", response.headers().toString());
         if (response.isSuccessful()) {
-            Log.e("Datas", response.body().toString());
             view.updateWidget(response.body());
         } else {
-            Log.e("ResponseValid", response.message());
+            view.showErrorMessage("Impossible de récupérer les données");
         }
     }
 
     @Override
     public void onFailure(retrofit2.Call<Weather> call, Throwable t) {
-        Log.e("ResponseFail", t.getMessage());
-        Log.e("URL", Arrays.toString(t.getStackTrace()));
+        view.showErrorMessage("Impossible de récupérer les données");
     }
 }

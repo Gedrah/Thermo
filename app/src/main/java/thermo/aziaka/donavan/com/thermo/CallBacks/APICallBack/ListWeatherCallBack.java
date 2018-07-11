@@ -21,23 +21,17 @@ public class ListWeatherCallBack implements Callback<WeatherList> {
 
     @Override
     public void onResponse(retrofit2.Call<WeatherList> call, Response<WeatherList> response) {
-        Log.e("header", response.headers().toString());
         if (response.isSuccessful()) {
-            Log.e("Datas", response.body().toString());
-            Log.e("Datas Place", String.valueOf(response.raw()));
             context.addItemToList(response.body().getList());
         } else {
-            Log.e("ResponseValid", response.message());
-            mView.showMessage("Erreur", "Votre ville n'existe pas.");
+            mView.showMessage("Erreur", "La liste des villes n'a pas pu être chargés.");
         }
         mView.hideProgressDialog();
     }
 
     @Override
     public void onFailure(retrofit2.Call<WeatherList> call, Throwable t) {
-        Log.e("ResponseFail", t.getMessage());
-        Log.e("URL", Arrays.toString(t.getStackTrace()));
-        mView.showMessage("Erreur", "Un problème de connexion est survenu");
+        mView.showMessage("Erreur", "Un problème de connexion est survenu. Veuillez vérifier votre connexion internet et réessayer.");
         mView.hideProgressDialog();
     }
 }

@@ -4,6 +4,7 @@
     tools:context="thermo.aziaka.donavan.com.thermo.Main.MainActivity">
     <item
         android:id="@+id/refresh_city"
+        android:icon="@drawable/ic_update_black_24dp"
         android:title="Recharger la ville choisie"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 </menu>

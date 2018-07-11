@@ -79,7 +79,6 @@ public class Utils {
     public static List<String> getWeatherListFromDatabase(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("WeatherList", Context.MODE_PRIVATE);
         String weatherList = sharedPref.getString("WeatherList", "");
-        Log.e("Datas", weatherList);
         if (weatherList.equals(""))
             return null;
         String[] items = weatherList.split(",");

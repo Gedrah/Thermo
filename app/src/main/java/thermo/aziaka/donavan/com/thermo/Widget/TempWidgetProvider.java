@@ -5,18 +5,24 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.opengl.Visibility;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import thermo.aziaka.donavan.com.thermo.API.OpenWeatherMapAPI;
 import thermo.aziaka.donavan.com.thermo.CallBacks.APICallBack.WidgetWeatherCallBack;
 import thermo.aziaka.donavan.com.thermo.Constant;
 import thermo.aziaka.donavan.com.thermo.Main.MainActivity;
+import thermo.aziaka.donavan.com.thermo.Main.MainContract;
 import thermo.aziaka.donavan.com.thermo.Models.Weather;
 import thermo.aziaka.donavan.com.thermo.R;
 import thermo.aziaka.donavan.com.thermo.Utils;
@@ -68,15 +74,34 @@ public class TempWidgetProvider extends AppWidgetProvider {
         formatter.setMaximumFractionDigits(0);
         String temp = String.format("%s°C", formatter.format(item.getMain().getTemp()));
 
+        hideErrorMessage();
         views.setTextViewText(R.id.temperature, temp);
         views.setTextViewText(R.id.city, item.getName());
         views.setTextViewText(R.id.country, item.getSys().getCountry());
         Picasso.get().load(Constant.URL_IMG + item.getWeather().get(0).getIcon() + ".png").into(views, R.id.favori, idsWidgets);
     }
 
+    public void showErrorMessage(String message) {
+        views.setViewVisibility(R.id.normal_layout, View.INVISIBLE);
+
+        views.setTextViewText(R.id.error_message, message);
+        views.setViewVisibility(R.id.error_message, View.VISIBLE);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideErrorMessage();
+            }
+        }, 2000);
+    }
+
+    public void hideErrorMessage() {
+        views.setViewVisibility(R.id.normal_layout, View.VISIBLE);
+        views.setViewVisibility(R.id.error_message, View.INVISIBLE);
+    }
+
     public void callWeatherAPIFromWidget(String city, Context context) {
         OpenWeatherMapAPI api = OpenWeatherMapAPI.retrofit.create(OpenWeatherMapAPI.class);
-        Log.e("It doesn't works ?", "Current string " + city);
         Call<Weather> call = api.getWeatherWidget(city,"metric", "fr", APP_ID);
         call.enqueue(new WidgetWeatherCallBack(context, this));
     }
