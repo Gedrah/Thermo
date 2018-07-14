@@ -10,4 +10,4 @@ Available on Google Play :
 
 # License
 
-Temp Weather is open source software [licensed as MIT](https://github.com/Epi-Tools/Thermo/blob/master/LICENSE).
+Temp Weather is open source software [licensed as MIT](https://github.com/Gedrah/Thermo/blob/master/LICENSE).
